@@ -6,8 +6,8 @@
 class TDCEffPlot : public TObject
 {
 public:
-  TDCEffPlot(){;}
-  virtual ~TDCEffPlot(){;}
+  TDCEffPlot();
+  virtual ~TDCEffPlot();
 
 public:
   ClassDef(TDCEffPlot, 1)
