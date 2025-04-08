@@ -1,0 +1,7 @@
+*.[oa]
+*.so
+*~
+*_cc.so
+*_cc.d
+build/*
+install/*
