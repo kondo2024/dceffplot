@@ -5,3 +5,4 @@
 *_cc.d
 build/*
 install/*
+*_linkdef.hh
