@@ -4,9 +4,6 @@
 //_________________________________________________
 TDCEffPlot::TDCEffPlot()
 {
-
-  TString str("aaaa");
-  std::cout<<str.Data()<<std::endl;
 }
 //_________________________________________________
 TDCEffPlot::~TDCEffPlot()
