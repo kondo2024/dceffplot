@@ -3,8 +3,7 @@
 analyze and make plot of efficiency curve of a drift chamber.
 
 ## how to install
-<code>
-$ cd dceffplot
+<code>$ cd dceffplot
 $ emacs setup.sh (modify environmental values)
 $ source setup.sh
 $ mkdir build

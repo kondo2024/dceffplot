@@ -1,0 +1,5 @@
+#LayerID Name geo ch_start ch_stop wireid_start wireid_stop
+0 NEOLITH-s_1-u   20  0  79 0 79
+1 NEOLITH-s_1-v   20 80 111 0 31
+1 NEOLITH-s_1-v   21  0  47 32 79
+2 NEOLITH-s_1-pot 21 48  95 0 47
