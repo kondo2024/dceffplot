@@ -20,11 +20,17 @@ public:
   virtual void AnalyzeAll() = 0;
   virtual void Plot(Int_t layer) = 0;
   virtual void Write(TObject* obj) = 0;
+
+  void SetRIDFfileDir(const char* dir){fRIDFfileDir = dir;}
+  void SetRIDFfileName(const char* fname){fRIDFfileName = fname;}
+  void SetROOTfileDir(const char* dir){fROOTfileDir = dir;}
+  void SetROOTfileName(const char* fname){fROOTfileName = fname;}
   
 protected:
   TString fRIDFfileDir;
   TString fRIDFfileName;
   TString fROOTfileDir;
+  TString fROOTfileName;
   TList* fFilenameList;
 
   TString fMapFilename;

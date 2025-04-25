@@ -21,11 +21,7 @@ using namespace std;
 TDCEffPlot_NEOLITHs::TDCEffPlot_NEOLITHs()
   : fNlayer(0)
 {
-  fRIDFfileDir = "../example/titech";
-  fRIDFfileName = "data";
-  fROOTfileDir = "../example/titech/root";
-
-  fOutFile = new TFile("eff_NEOLITHs.root","recreate");
+  fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
   fPlotItems = new TList();
 
   // set Color palette
@@ -40,6 +36,7 @@ TDCEffPlot_NEOLITHs::TDCEffPlot_NEOLITHs()
   fPalette[8] = 45;
   fPalette[9] = 30;
 
+  fIndex2geo.resize(80*3);
   
 }
 //_________________________________________________
@@ -102,7 +99,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
   for (int ilayer=0;ilayer<fNlayer;++ilayer){
     TString lname = fVLayerName[ilayer];
     htmp = new TH1D(Form("htl%i",ilayer),Form("T leading Layer=%i %s",ilayer, lname.Data()),
-			   2000,0,20000);
+			   2000,-5000,5000);
     htl.push_back(htmp);
   }
 
@@ -110,7 +107,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
   for (int ilayer=0;ilayer<fNlayer;++ilayer){
     TString lname = fVLayerName[ilayer];
     htmp = new TH1D(Form("htt%i",ilayer),Form("T trailing Layer=%i %s",ilayer, lname.Data()),
-		    2000,0,20000);
+		    2000,-5000,5000);
     htt.push_back(htmp);
   }
 
@@ -128,6 +125,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
   Int_t T_leading[index_max];
   Int_t T_trailing[index_max];
   std::vector<Int_t> multi(fNlayer);
+  fTrefval.clear();
   
   int neve = 0;
   while(estore.GetNextEvent()){
@@ -157,7 +155,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
         int id = d->GetDatatypeID();
         int edge = d->GetEdge();
 
-	// check geo
+	// check geo, skip if not found
 	if(find(fVgeo.begin(), fVgeo.end(),geo) == fVgeo.end()) continue;
 
 	// store tref values ***** subtraction should be implemented
@@ -173,37 +171,38 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
 
 	int wireid = FindWireID(geo,ch);
 	int index = layer*80 + wireid;// for neolith-s
+	fIndex2geo[index] = geo;
 
 	hindexwid->Fill(index,wireid);
 	hindexlayer->Fill(index,layer);
 	hindexgeo->Fill(index,geo);
 	hindexch->Fill(index,ch);
-	
-//	if (edge==0){
-	if (edge==1){
+
+	if (edge==0){
+//	if (edge==1){
 	  multi[layer]++;
 	  hwid[layer]->Fill(wireid);
-
-	  htl[layer]->Fill(val);
 
 	  T_leading[index] = val;
 	  hindextl->Fill(index,val);
 	  
-//	}else if (edge==1) {
-	}else if (edge==0) {
-	  htt[layer]->Fill(val);
+	}else if (edge==1) {
+//	}else if (edge==0) {
 	  T_trailing[index] = val;
 	}
 	
       }
     }
 
-    // calc. ToT
+    // subtract Tref, calc. ToT
     for (int index=0;index<index_max;++index){
       int layer = index/80;
-
-      if (T_leading[index]>0) htl[layer]->Fill(T_leading[index]);
-      if (T_trailing[index]>0) htt[layer]->Fill(T_trailing[index]);
+      int geo = fIndex2geo[index];
+      int tref = fTrefval[geo];
+      if (tref<0) cout<<" tref is not found!!!"<<endl;
+      
+      if (T_leading[index]>0) htl[layer]->Fill(T_leading[index]-tref);
+      if (T_trailing[index]>0) htt[layer]->Fill(T_trailing[index]-tref);
 
       if (T_leading[index]>0 && T_trailing[index]>0 ){
         int tot = T_trailing[index] - T_leading[index];

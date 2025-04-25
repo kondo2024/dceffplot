@@ -23,6 +23,7 @@ public:
   Int_t FindWireID(Int_t geo,Int_t ch);
   Int_t FindHitLayer(Int_t geo,Int_t ch);
   Int_t GetTref(Int_t geo);
+
   
 protected:
   // run list
@@ -46,7 +47,8 @@ protected:
   std::map<int,TString> fVLayerName;// key is layer num
   std::map<int,int> fTrefmap;// pair of (geo,ch)
   std::map<int,int> fTrefval;// pair of (geo,tdc value)
-
+  std::vector<int> fIndex2geo;
+  
   TFile *fOutFile;
   TList *fPlotItems;
   

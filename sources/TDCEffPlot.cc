@@ -3,6 +3,10 @@
 #include "TString.h"
 //_________________________________________________
 TDCEffPlot::TDCEffPlot()
+  : fRIDFfileDir("ridf/"),
+    fRIDFfileName("neotest"),
+    fROOTfileDir("root"),
+    fROOTfileName("eff_NEOLITHs.root")
 {
 }
 //_________________________________________________
