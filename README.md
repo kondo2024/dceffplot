@@ -9,7 +9,7 @@ $ source setup.sh
 $ mkdir build
 $ mkdir install
 $ cd build
-$ cmake -DCMAKE_INSTALL_PREFIX=../install
+$ cmake -DCMAKE_INSTALL_PREFIX=../install ../sources
 $ make install
 </code>
 
