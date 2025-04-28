@@ -19,11 +19,8 @@
 using namespace std;
 //_________________________________________________
 TDCEffPlot_NEOLITHs::TDCEffPlot_NEOLITHs()
-  : fNlayer(0)
+  : fNlayer(0), fOutFile(0)
 {
-  fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
-  fPlotItems = new TList();
-
   // set Color palette
   fPalette[0] = 2;
   fPalette[1] = 1;
@@ -225,6 +222,10 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
 //_________________________________________________
 void TDCEffPlot_NEOLITHs::Plot(Int_t layer)
 {
+  if (fOutFile==0){
+    fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
+  }
+  fPlotItems = new TList();
 
   fOutFile->cd();
 
