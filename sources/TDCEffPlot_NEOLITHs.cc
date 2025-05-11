@@ -220,6 +220,35 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
     
   }
 
+  
+  //showing analyzed results
+  printf("#Name :Sum(M) M1 M2 M3 M4 M5+ MW1 MW2 MW3 MW4+ MC1 MC2 MC3 MC4+ :Tot/Ana:\n");
+
+
+  Int_t Ntrig=ieve;
+  for(int ilayer=0;ilayer<fNlayer;++ilayer){
+    double eff[kMmax];
+    TH1* h = hmulti[ilayer];
+    Int_t ix0 = h->FindBin(0.0);
+    Int_t counts = Ntrig - h->GetBinContent(ix0);
+    Int_t nx = h->GetNbinsX();
+    eff[0] = 100.*counts/Ntrig;
+    for(int imulti=1;imulti<kMmax;imulti++){
+      // Int_t mcounts = GetMultiCountsilayer,imulti);
+      Int_t ix = h->FindBin((double)imulti);
+      Int_t mcounts = h->GetBinContent(ix);
+      eff[imulti]=100.*mcounts/Ntrig;
+    }
+    //      nm Mall  M1    M2    M3    M4    M5+   MW1   MW2   MW3   MW4+  MC1   MC2   MC3   MC4+  Tot Ana  
+    printf("%s : %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %d %d\n",
+	   fVLayerName[ilayer].Data(),
+	   eff[0],eff[1],eff[2],eff[3],eff[4],eff[5],
+	   0,0,0,0,
+	   0,0,0,0,
+	   Ntrig,Ntrig);
+    
+  }
+  
   fout.Write();
   fout.Close();
 
@@ -299,6 +328,12 @@ void TDCEffPlot_NEOLITHs::Write(TObject *obj)
 {
   fOutFile->Add(obj);
   fOutFile->Write();
+}
+//_________________________________________________
+Int_t TDCEffPlot_NEOLITHs::GetMultiCounts(Int_t layer, Int_t multi)
+{
+  // should be implemented
+  return 0;// temp
 }
 //_________________________________________________
 TGraph* TDCEffPlot_NEOLITHs::MakeGraph(Int_t layer, Int_t multi)
