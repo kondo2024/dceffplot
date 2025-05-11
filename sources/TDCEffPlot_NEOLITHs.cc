@@ -50,7 +50,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeAll()
   
 }
 //_________________________________________________
-void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
+void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
 {
   TArtEventStore estore;
   estore.Open(Form("%s/%s%04d.ridf",fRIDFfileDir.Data(),
@@ -79,7 +79,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
   for (int ilayer=0;ilayer<fNlayer;++ilayer){
     TString lname = fVLayerName[ilayer];
     htmp = new TH1D(Form("hwid%i",ilayer),Form("Wire ID Layer=%i %s",ilayer, lname.Data()),
-		   80,-0.5,80.5);
+		   80,-0.5,79.5);
     hwid.push_back(htmp);
   }
   
@@ -124,7 +124,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
   std::vector<Int_t> multi(fNlayer);
   fTrefval.clear();
   
-  int neve = 0;
+  int ieve = 0;
   while(estore.GetNextEvent()){
 
     for (int i=0;i<index_max;++i){
@@ -212,7 +212,12 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun)
     }
 
     estore.ClearData();
-    neve ++;
+    ieve++;
+
+    if (neve>0){
+      if (ieve>=neve) break;
+    }
+    
   }
 
   fout.Write();

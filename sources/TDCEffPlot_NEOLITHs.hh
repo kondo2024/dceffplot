@@ -14,7 +14,7 @@ public:
   virtual void LoadRunListFile(TString fname);
   virtual void LoadMapFile(TString fname);
   virtual void AnalyzeAll();
-  virtual void AnalyzeRun(Int_t nRun);
+  virtual void AnalyzeRun(Int_t nRun, Long64_t neve=0);
   virtual void Plot(Int_t layer);
   virtual void Write(TObject *obj);
   virtual TGraph* MakeGraph(Int_t layer, Int_t multi);
