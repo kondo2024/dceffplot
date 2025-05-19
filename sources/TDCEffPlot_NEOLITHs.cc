@@ -12,6 +12,7 @@
 #include "TLine.h"
 #include "TText.h"
 #include "TCanvas.h"
+#include "TDirectory.h"
 
 #include "TArtEventStore.hh"
 #include "TArtRawEventObject.hh"
@@ -53,8 +54,12 @@ void TDCEffPlot_NEOLITHs::AnalyzeAll()
 void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
 {
   TArtEventStore estore;
-  estore.Open(Form("%s/%s%04d.ridf",fRIDFfileDir.Data(),
-		   fRIDFfileName.Data(),nRun));
+  if (nRun==0){
+    estore.Open(0);// online data
+  }else{
+    estore.Open(Form("%s/%s%04d.ridf",fRIDFfileDir.Data(),
+		     fRIDFfileName.Data(),nRun));
+  }
   TArtRawEventObject *rawevent = estore.GetRawEventObject();
 
   TFile fout(Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
@@ -68,10 +73,12 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
   TH1* hindextl = new TH2D("hindextl","Index Tleading",13*16,-0.5,13*16-0.5, 100,0,30000);
   
   std::vector<TH1*> hwid;
+  std::vector<TH1*> hmulti;
   std::vector<TH1*> htl;
   std::vector<TH1*> htt;
   std::vector<TH1*> htot;
-  std::vector<TH1*> hmulti;
+  std::vector<TH1*> htlraw;
+  std::vector<TH1*> httraw;
 
   TH1* htmp =0;
 
@@ -95,7 +102,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
   // T leading
   for (int ilayer=0;ilayer<fNlayer;++ilayer){
     TString lname = fVLayerName[ilayer];
-    htmp = new TH1D(Form("htl%i",ilayer),Form("T leading Layer=%i %s",ilayer, lname.Data()),
+    htmp = new TH1D(Form("htl%i",ilayer),Form("T leading Layer=%i %s (tref subtracted)",ilayer, lname.Data()),
 			   2000,-5000,5000);
     htl.push_back(htmp);
   }
@@ -103,7 +110,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
   // T trailing
   for (int ilayer=0;ilayer<fNlayer;++ilayer){
     TString lname = fVLayerName[ilayer];
-    htmp = new TH1D(Form("htt%i",ilayer),Form("T trailing Layer=%i %s",ilayer, lname.Data()),
+    htmp = new TH1D(Form("htt%i",ilayer),Form("T trailing Layer=%i %s (tref subtracted)",ilayer, lname.Data()),
 		    2000,-5000,5000);
     htt.push_back(htmp);
   }
@@ -115,6 +122,24 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
 		   2000,0,20000);
     htot.push_back(htmp);
   }
+
+  // T leading w/ subtraction of Tref
+  for (int ilayer=0;ilayer<fNlayer;++ilayer){
+    TString lname = fVLayerName[ilayer];
+    htmp = new TH1D(Form("htlraw%i",ilayer),Form("Traw leading Layer=%i %s",ilayer, lname.Data()),
+			   2000,0,30000);
+    htlraw.push_back(htmp);
+  }
+
+  // T trailing w/ subtraction of Tref
+  for (int ilayer=0;ilayer<fNlayer;++ilayer){
+    TString lname = fVLayerName[ilayer];
+    htmp = new TH1D(Form("httraw%i",ilayer),Form("Traw trailing Layer=%i %s",ilayer, lname.Data()),
+		    2000,0,30000);
+    httraw.push_back(htmp);
+  }
+
+
   
   TH1* htotttrail0 = new TH2D("htotttrail0","V1190-1 ToT Ttrailing",100,-2000,1000,200,12000,20000);
 
@@ -127,6 +152,11 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
   int ieve = 0;
   while(estore.GetNextEvent()){
 
+    if (ieve%10==0)
+      if (neve==0) cout<<"\r events = "<<ieve<<flush;
+      else	   cout<<"\r events = "<<ieve
+		       <<" / "<<neve<<flush;
+    
     for (int i=0;i<index_max;++i){
       T_leading[i] = -1;
       T_trailing[i] = -1;
@@ -140,7 +170,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
       int detector = seg->GetDetector();
       int module = seg->GetModule();
 
-      if (module!=24) continue;// titech setup
+      if (module!=24) continue;// V1190
       
       for(int j=0;j<seg->GetNumData();j++){
         TArtRawDataObject *d = seg->GetData(j);
@@ -155,7 +185,7 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
 	// check geo, skip if not found
 	if(find(fVgeo.begin(), fVgeo.end(),geo) == fVgeo.end()) continue;
 
-	// store tref values ***** subtraction should be implemented
+	// store tref values 
 	auto iter = fTrefmap.find(geo);
 	if (iter->second == ch && edge==0){
 	  fTrefval[geo] = val;
@@ -198,8 +228,15 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
       int tref = fTrefval[geo];
       if (tref<0) cout<<" tref is not found!!!"<<endl;
       
-      if (T_leading[index]>0) htl[layer]->Fill(T_leading[index]-tref);
-      if (T_trailing[index]>0) htt[layer]->Fill(T_trailing[index]-tref);
+      if (T_leading[index]>0) {
+	htl[layer]->Fill(T_leading[index]-tref);
+	htlraw[layer]->Fill(T_leading[index]);
+      }
+      
+      if (T_trailing[index]>0){
+	htt[layer]->Fill(T_trailing[index]-tref);
+	httraw[layer]->Fill(T_trailing[index]);
+      }
 
       if (T_leading[index]>0 && T_trailing[index]>0 ){
         int tot = T_trailing[index] - T_leading[index];
@@ -220,34 +257,32 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
     
   }
 
-  
-  //showing analyzed results
-  printf("#Name :Sum(M) M1 M2 M3 M4 M5+ MW1 MW2 MW3 MW4+ MC1 MC2 MC3 MC4+ :Tot/Ana:\n");
+  if (neve==0) cout<<"\r events = "<<ieve<<flush;
+  else         cout<<"\r events = "<<ieve
+		   <<" / "<<neve<<flush;
+  cout<<endl;
 
-
+  //show analyzed results
+  cout<<endl;
   Int_t Ntrig=ieve;
+  printf("#Name    : Sum(M) M1    M2    M3    M4    M5+   MW1   MW2   MW3   MW4+  MC1   MC2   MC3   MC4+  :Tot/Ana: %d %d\n",
+	 Ntrig,Ntrig);
+
   for(int ilayer=0;ilayer<fNlayer;++ilayer){
     double eff[kMmax];
-    TH1* h = hmulti[ilayer];
-    Int_t ix0 = h->FindBin(0.0);
-    Int_t counts = Ntrig - h->GetBinContent(ix0);
-    Int_t nx = h->GetNbinsX();
-    eff[0] = 100.*counts/Ntrig;
-    for(int imulti=1;imulti<kMmax;imulti++){
-      // Int_t mcounts = GetMultiCountsilayer,imulti);
-      Int_t ix = h->FindBin((double)imulti);
-      Int_t mcounts = h->GetBinContent(ix);
-      eff[imulti]=100.*mcounts/Ntrig;
+    for(int imulti=0;imulti<kMmax-1;imulti++){
+      eff[imulti] = GetEffMulti(ilayer,imulti);
     }
-    //      nm Mall  M1    M2    M3    M4    M5+   MW1   MW2   MW3   MW4+  MC1   MC2   MC3   MC4+  Tot Ana  
-    printf("%s : %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %d %d\n",
+    double eff_Mgeof = GetEffMultiGeN(ilayer,kMmax-1);
+    //      nm      Mall  M1    M2    M3    M4    M5+   MW1   MW2   MW3   MW4+  MC1   MC2   MC3   MC4+
+    printf("%-8s :  %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f\n",
 	   fVLayerName[ilayer].Data(),
-	   eff[0],eff[1],eff[2],eff[3],eff[4],eff[5],
-	   0,0,0,0,
-	   0,0,0,0,
-	   Ntrig,Ntrig);
+	   eff[0],eff[1],eff[2],eff[3],eff[4],eff_Mgeof,
+	   0.,0.,0.,0.,
+	   0.,0.,0.,0.);
     
   }
+  cout<<endl;
   
   fout.Write();
   fout.Close();
@@ -269,13 +304,14 @@ void TDCEffPlot_NEOLITHs::Plot(Int_t layer)
   TList *tlist = new TList();
   tlist->SetName(fVLayerName[layer].Data());
   
-  TGraph *g[kMmax];
-  for (int i=0;i<kMmax;++i){
+  TGraph *g[kMmax+1];
+  for (int i=0;i<kMmax-1;++i){
     g[i] = MakeGraph(layer,i);
-    tlist->Add(g[i]);
   }
+  g[kMmax-1] = MakeGraph_MgeN(layer,kMmax-1);
   
   for (int i=0;i<kMmax;++i) {
+    tlist->Add(g[i]);
     g[i]->SetLineColor(fPalette[i]);
     g[i]->SetMarkerColor(fPalette[i]);
   }
@@ -291,6 +327,7 @@ void TDCEffPlot_NEOLITHs::Plot(Int_t layer)
 
     TString text(Form("M%i",i));
     if (i==0) text = "Mall";
+    if (i==kMmax-1) text = Form("M>=%d",kMmax-1);
     TText *t = new TText(x+0.1,y,text.Data());
     t->SetNDC(1);
     t->SetTextAlign(12);
@@ -298,8 +335,12 @@ void TDCEffPlot_NEOLITHs::Plot(Int_t layer)
     y -= 0.05;
   }
 
-  // M>=3
-  g[kMmax] = MakeGraph_Mge3(layer);
+
+  if (layer<2){  // M>=3 for Ku,Ku
+    g[kMmax] = MakeGraph_MgeN(layer, 3);
+  }else{// M>=2 for Potential
+    g[kMmax] = MakeGraph_MgeN(layer, 2);
+  }
   g[kMmax]->SetLineColor(2);
   g[kMmax]->SetLineStyle(2);
   g[kMmax]->SetMarkerColor(2);
@@ -310,7 +351,12 @@ void TDCEffPlot_NEOLITHs::Plot(Int_t layer)
   l->SetNDC(1);
   tlist->Add(l);
 
-  TText *t = new TText(x+0.1,y,"M>=3");
+  TText *t;
+  if (layer<2){
+    t = new TText(x+0.1,y,"M>=3");
+  }else{
+    t = new TText(x+0.1,y,"M>=2");
+  }
   t->SetNDC(1);
   t->SetTextAlign(12);
   tlist->Add(t);
@@ -330,10 +376,40 @@ void TDCEffPlot_NEOLITHs::Write(TObject *obj)
   fOutFile->Write();
 }
 //_________________________________________________
-Int_t TDCEffPlot_NEOLITHs::GetMultiCounts(Int_t layer, Int_t multi)
+// return total efficiency if multi=0
+Double_t TDCEffPlot_NEOLITHs::GetEffMulti(Int_t layer, Int_t multi)
 {
-  // should be implemented
-  return 0;// temp
+  TH1* h = (TH1*)gDirectory->Get(Form("hmulti%i",layer));
+
+  Int_t Ntrig = h->GetEntries();
+  Int_t ix = h->FindBin((double)multi);
+  Int_t counts = h->GetBinContent(ix);
+
+  Double_t eff = -1;
+  if (multi==0){// total efficiency
+    eff = 100.*(Ntrig-counts)/Ntrig;// %
+  }else {
+    eff = 100.*counts/Ntrig;// %
+  }
+  return eff;
+}
+//_________________________________________________
+// return total efficiency if multi=0
+Double_t TDCEffPlot_NEOLITHs::GetEffMultiGeN(Int_t layer, Int_t multi)
+{
+  TH1* h = (TH1*)gDirectory->Get(Form("hmulti%i",layer));
+
+  Int_t Ntrig = h->GetEntries();
+  Int_t counts = Ntrig;
+  
+  Double_t eff = -1;
+  for (int i=0;i<multi;++i){
+    Int_t ix = h->FindBin((double)i);
+    counts -= h->GetBinContent(ix);
+  }
+  eff = 100.*counts/Ntrig;// %
+
+  return eff;
 }
 //_________________________________________________
 TGraph* TDCEffPlot_NEOLITHs::MakeGraph(Int_t layer, Int_t multi)
@@ -356,23 +432,14 @@ TGraph* TDCEffPlot_NEOLITHs::MakeGraph(Int_t layer, Int_t multi)
     TFile file(Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
 		    fRIDFfileName.Data(),irun));
 
-    TH1* h = (TH1*)file.Get(Form("hmulti%i",layer));
-    Int_t Ntrig = h->GetEntries();
-    Int_t ix = h->FindBin((double)multi);
-    Int_t counts = h->GetBinContent(ix);
-    if (multi==0){// total efficiency
-      double eff = 100.*(Ntrig-counts)/Ntrig;// %
-      g->SetPoint(n,hv,eff);
-    }else {
-      double eff = 100.*counts/Ntrig;// %
-      g->SetPoint(n,hv,eff);
-    }
+    double eff = GetEffMulti(layer,multi);
+    g->SetPoint(n,hv,eff);    
   }
   return g;
   
 }
 //_________________________________________________
-TGraph* TDCEffPlot_NEOLITHs::MakeGraph_Mge3(Int_t layer)
+TGraph* TDCEffPlot_NEOLITHs::MakeGraph_MgeN(Int_t layer, Int_t multi)
 {
   TGraph * g = new TGraph();
   g->SetName(fVLayerName[layer]);
@@ -391,17 +458,8 @@ TGraph* TDCEffPlot_NEOLITHs::MakeGraph_Mge3(Int_t layer)
 
     TFile file(Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
 		    fRIDFfileName.Data(),irun));
-
-    TH1* h = (TH1*)file.Get(Form("hmulti%i",layer));
-    Int_t Ntrig = h->GetEntries();
-    Int_t ix0 = h->FindBin(0.0);
-    Int_t ix1 = h->FindBin(1.0);
-    Int_t ix2 = h->FindBin(2.0);
-    Int_t m0 = h->GetBinContent(ix0);
-    Int_t m1 = h->GetBinContent(ix1);
-    Int_t m2 = h->GetBinContent(ix2);
-
-    double eff = 100.*(Ntrig-m0-m1-m2)/Ntrig;// %
+    double eff = GetEffMultiGeN(layer,multi);
+    
     g->SetPoint(n,hv,eff);
 
   }

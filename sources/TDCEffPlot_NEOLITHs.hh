@@ -17,9 +17,10 @@ public:
   virtual void AnalyzeRun(Int_t nRun, Long64_t neve=0);
   virtual void Plot(Int_t layer);
   virtual void Write(TObject *obj);
-  virtual Int_t GetMultiCounts(Int_t layer, Int_t multi);
+  virtual Double_t GetEffMulti(Int_t layer, Int_t multi);
+  virtual Double_t GetEffMultiGeN(Int_t layer, Int_t multi);
   virtual TGraph* MakeGraph(Int_t layer, Int_t multi);
-  virtual TGraph* MakeGraph_Mge3(Int_t layer);
+  virtual TGraph* MakeGraph_MgeN(Int_t layer, Int_t multi);
 
   Int_t FindWireID(Int_t geo,Int_t ch);
   Int_t FindHitLayer(Int_t geo,Int_t ch);
@@ -49,7 +50,7 @@ protected:
   std::map<int,int> fTrefmap;// pair of (geo,ch)
   std::map<int,int> fTrefval;// pair of (geo,tdc value)
   std::vector<int> fIndex2geo;
-  
+
   TFile *fOutFile;
   TList *fPlotItems;
   
