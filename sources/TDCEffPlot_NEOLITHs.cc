@@ -205,17 +205,17 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
 	hindexgeo->Fill(index,geo);
 	hindexch->Fill(index,ch);
 
-	if (edge==0){
-//	if (edge==1){
+//	if (edge==0){
+	if (edge==1){// tachi agari
 	  multi[layer]++;
 	  hwid[layer]->Fill(wireid);
 
+	  T_trailing[index] = val;
+	  
+//	}else if (edge==1) {
+	}else if (edge==0) {// tachi sagari
 	  T_leading[index] = val;
 	  hindextl->Fill(index,val);
-	  
-	}else if (edge==1) {
-//	}else if (edge==0) {
-	  T_trailing[index] = val;
 	}
 	
       }
@@ -239,7 +239,8 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
       }
 
       if (T_leading[index]>0 && T_trailing[index]>0 ){
-        int tot = T_trailing[index] - T_leading[index];
+        //int tot = T_trailing[index] - T_leading[index];
+        int tot = T_leading[index] - T_trailing[index];
 	htot[layer]->Fill(tot);
       }
     }
