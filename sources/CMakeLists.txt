@@ -36,7 +36,6 @@ add_definitions(${ROOT_CXX_FLAGS})
 #----------------------------------
 #----------------------------------
 
-
 file(GLOB SRC_FILES "*.cc")
 file(GLOB INC_FILES "*.hh")
 
@@ -46,10 +45,8 @@ install(FILES ${INC_FILES} DESTINATION include)
 install(TARGETS dceffplot
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-#target_link_libraries(anaroot ${ROOT_LIBRARIES} anacore ananadeko anabrips anacatana anadali anaespri anasamurai anasilicons anawinds analoop analoopexample analoopencexample)
-#
-
-
+#target_link_libraries(dceffplot ${ROOT_LIBRARIES} anacore ananadeko anabrips anacatana anadali anaespri anasamurai anasilicons anawinds analoop analoopexample analoopencexample)
+##
 
 #### make dceffplot_linkdef.hh
 message(STATUS "Making dictionary dceffplot for ROOT")
@@ -62,6 +59,11 @@ list(APPEND CMAKE_MESSAGE_INDENT "  ")
 foreach(loop_var IN LISTS INC_FILES)
   message(STATUS "${loop_var}")
   get_filename_component(loop_var_filename "${loop_var}" NAME_WE)
+
+  if(${loop_var_filename} STREQUAL "dceffplot_linkdef")
+    continue()
+  endif()
+  
   file(APPEND dceffplot_linkdef.hh "#pragma link C++ class ${loop_var_filename}+;\n")
 endforeach()
 list(POP_BACK CMAKE_MESSAGE_INDENT)

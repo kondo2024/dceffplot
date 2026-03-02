@@ -16,9 +16,9 @@ public:
   virtual void AnalyzeAll();
   virtual void AnalyzeRun(Int_t nRun, Long64_t neve=0);
   virtual void Plot(Int_t layer);
-  virtual void Write(TObject *obj);
-  virtual Double_t GetEffMulti(Int_t layer, Int_t multi);
-  virtual Double_t GetEffMultiGeN(Int_t layer, Int_t multi);
+//  virtual void Write(TObject *obj);
+//  virtual Double_t GetEffMulti(Int_t layer, Int_t multi);
+//  virtual Double_t GetEffMultiGeN(Int_t layer, Int_t multi);
   virtual TGraph* MakeGraph(Int_t layer, Int_t multi);
   virtual TGraph* MakeGraph_MgeN(Int_t layer, Int_t multi);
 
@@ -28,9 +28,6 @@ public:
 
   
 protected:
-  // run list
-  std::vector<int> fVRunNum;
-  std::vector<double> fVhv;
 
   // for map
   std::vector<int> fVLayerID;// index is ilist
@@ -40,9 +37,6 @@ protected:
   std::vector<int> fVwireidstart;
   std::vector<int> fVwireidstop;
 
-  int fNlayer;
-
-  int fPalette[10];
 
   static const int kMmax = 6;
   
@@ -51,7 +45,6 @@ protected:
   std::map<int,int> fTrefval;// pair of (geo,tdc value)
   std::vector<int> fIndex2geo;
 
-  TFile *fOutFile;
   TList *fPlotItems;
   
   ClassDef(TDCEffPlot_NEOLITHs, 1)

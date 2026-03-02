@@ -20,22 +20,8 @@
 using namespace std;
 //_________________________________________________
 TDCEffPlot_NEOLITHs::TDCEffPlot_NEOLITHs()
-  : fNlayer(0), fOutFile(0)
 {
-  // set Color palette
-  fPalette[0] = 2;
-  fPalette[1] = 1;
-  fPalette[2] = 3;
-  fPalette[3] = 4;
-  fPalette[4] = 6;
-  fPalette[5] = 7;
-  fPalette[6] = 8;
-  fPalette[7] = 9;
-  fPalette[8] = 45;
-  fPalette[9] = 30;
-
   fIndex2geo.resize(80*3);
-  
 }
 //_________________________________________________
 TDCEffPlot_NEOLITHs::~TDCEffPlot_NEOLITHs()
@@ -369,48 +355,6 @@ void TDCEffPlot_NEOLITHs::Plot(Int_t layer)
   Write(tlist);
   Write(c1);
   
-}
-//_________________________________________________
-void TDCEffPlot_NEOLITHs::Write(TObject *obj)
-{
-  fOutFile->Add(obj);
-  fOutFile->Write();
-}
-//_________________________________________________
-// return total efficiency if multi=0
-Double_t TDCEffPlot_NEOLITHs::GetEffMulti(Int_t layer, Int_t multi)
-{
-  TH1* h = (TH1*)gDirectory->Get(Form("hmulti%i",layer));
-
-  Int_t Ntrig = h->GetEntries();
-  Int_t ix = h->FindBin((double)multi);
-  Int_t counts = h->GetBinContent(ix);
-
-  Double_t eff = -1;
-  if (multi==0){// total efficiency
-    eff = 100.*(Ntrig-counts)/Ntrig;// %
-  }else {
-    eff = 100.*counts/Ntrig;// %
-  }
-  return eff;
-}
-//_________________________________________________
-// return total efficiency if multi=0
-Double_t TDCEffPlot_NEOLITHs::GetEffMultiGeN(Int_t layer, Int_t multi)
-{
-  TH1* h = (TH1*)gDirectory->Get(Form("hmulti%i",layer));
-
-  Int_t Ntrig = h->GetEntries();
-  Int_t counts = Ntrig;
-  
-  Double_t eff = -1;
-  for (int i=0;i<multi;++i){
-    Int_t ix = h->FindBin((double)i);
-    counts -= h->GetBinContent(ix);
-  }
-  eff = 100.*counts/Ntrig;// %
-
-  return eff;
 }
 //_________________________________________________
 TGraph* TDCEffPlot_NEOLITHs::MakeGraph(Int_t layer, Int_t multi)

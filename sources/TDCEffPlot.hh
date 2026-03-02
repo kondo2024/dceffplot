@@ -6,7 +6,9 @@
 #define TDCEFFPLOT_HH
 
 #include "TObject.h"
+#include "TFile.h"
 #include "TString.h"
+#include "TGraph.h"
 #include <map>
 
 class TDCEffPlot : public TObject
@@ -16,15 +18,21 @@ public:
   virtual ~TDCEffPlot();
 
   virtual void LoadRunListFile(TString fname) = 0;
-  virtual void LoadMapFile(TString fname) = 0;
-  virtual void AnalyzeAll() = 0;
+  virtual void AnalyzeAll();
+  virtual void AnalyzeRun(Int_t irun) = 0;
   virtual void Plot(Int_t layer) = 0;
-  virtual void Write(TObject* obj) = 0;
+  virtual void Write(TObject* obj);
 
+  virtual Double_t GetEffMulti(Int_t layer, Int_t multi);
+  virtual Double_t GetEffMultiGeN(Int_t layer, Int_t multi);
+  virtual TGraph* MakeGraph(Int_t layer, Int_t multi);
+  virtual TGraph* MakeGraph_MgeN(Int_t layer, Int_t multi);
+  
   void SetRIDFfileDir(const char* dir){fRIDFfileDir = dir;}
   void SetRIDFfileName(const char* fname){fRIDFfileName = fname;}
   void SetROOTfileDir(const char* dir){fROOTfileDir = dir;}
   void SetROOTfileName(const char* fname){fROOTfileName = fname;}
+  void SetHistName(const char* hname){fHistName = hname;}
   
 protected:
   TString fRIDFfileDir;
@@ -32,12 +40,22 @@ protected:
   TString fROOTfileDir;
   TString fROOTfileName;
   TList* fFilenameList;
+  TFile *fOutFile;
+  TString fHistName;
 
   TString fMapFilename;
   TString fRunListFilename;
 
-  std::map<int,TString> fLayerName_map;
+  // run list
+  std::vector<int> fVRunNum;
+  std::vector<double> fVhv;
 
+  // layer name
+  int fNlayer;
+  std::map<int,TString> fVLayerName;// key is layer num
+
+  int fPalette[10];
+  
   ClassDef(TDCEffPlot, 1)
 };
 
