@@ -34,8 +34,8 @@ void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
   if (nRun==0){
     estore.Open(0);// online data
   }else{
-    estore.Open(Form("%s/%s%04d.ridf",fRIDFfileDir.Data(),
-		     fRIDFfileName.Data(),nRun));
+    estore.Open(Form("%s/%s%04d.%s",fRIDFfileDir.Data(),
+		     fRIDFfileName.Data(),nRun,fRIDFfileExt.Data()));
   }
   TArtRawEventObject *rawevent = estore.GetRawEventObject();
 

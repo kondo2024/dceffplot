@@ -10,6 +10,7 @@ using namespace std;
 TDCEffPlot::TDCEffPlot()
   : fRIDFfileDir("ridf/"),
     fRIDFfileName("dceff"),
+    fRIDFfileExt("ridf"),
     fROOTfileDir("root"),
     fROOTfileName("eff_dc.root"),
     fOutFile(0),

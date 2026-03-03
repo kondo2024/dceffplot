@@ -30,6 +30,7 @@ public:
   
   void SetRIDFfileDir(const char* dir){fRIDFfileDir = dir;}
   void SetRIDFfileName(const char* fname){fRIDFfileName = fname;}
+  void SetRIDFfileExt(const char* ext){fRIDFfileExt = ext;}
   void SetROOTfileDir(const char* dir){fROOTfileDir = dir;}
   void SetROOTfileName(const char* fname){fROOTfileName = fname;}
   void SetHistName(const char* hname){fHistName = hname;}
@@ -37,6 +38,7 @@ public:
 protected:
   TString fRIDFfileDir;
   TString fRIDFfileName;
+  TString fRIDFfileExt;
   TString fROOTfileDir;
   TString fROOTfileName;
   TList* fFilenameList;
