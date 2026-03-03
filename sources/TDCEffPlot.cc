@@ -110,7 +110,7 @@ void TDCEffPlot::LoadRunListFile(TString fname)
 Double_t TDCEffPlot::GetEffMulti(Int_t layer, Int_t multi)
 {
 //  TH1* h = (TH1*)gDirectory->Get(Form("hmulti%i",layer));
-  TH1* h = (TH1*)gDirectory->Get(Form("%%s%i",fHistName.Data(),layer));
+  TH1* h = (TH1*)gDirectory->Get(Form("%s%i",fHistName.Data(),layer));
 
   Int_t Ntrig = h->GetEntries();
   Int_t ix = h->FindBin((double)multi);
@@ -128,7 +128,7 @@ Double_t TDCEffPlot::GetEffMulti(Int_t layer, Int_t multi)
 // return total efficiency if multi=0
 Double_t TDCEffPlot::GetEffMultiGeN(Int_t layer, Int_t multi)
 {
-  TH1* h = (TH1*)gDirectory->Get(Form("%%s%i",fHistName.Data(),layer));
+  TH1* h = (TH1*)gDirectory->Get(Form("%s%i",fHistName.Data(),layer));
   //TH1* h = (TH1*)gDirectory->Get(Form("hmulti%i",layer));
 
   Int_t Ntrig = h->GetEntries();

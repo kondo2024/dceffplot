@@ -177,8 +177,8 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
     printf("%-8s :  %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f\n",
 	   fVLayerName[ilayer].Data(),
 	   eff[0],eff[1],eff[2],eff[3],eff[4],eff_Mgeof,
-	   0.,0.,0.,0.,
-	   0.,0.,0.,0.);
+	   0.,0.,0.,0.,// not implemented
+	   0.,0.,0.,0.);// not implemented
     
   }
   cout<<endl;
