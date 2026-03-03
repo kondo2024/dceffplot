@@ -28,15 +28,6 @@ TDCEffPlot_NEOLITHs::~TDCEffPlot_NEOLITHs()
 {
 }
 //_________________________________________________
-void TDCEffPlot_NEOLITHs::AnalyzeAll()
-{
-  for (int i=0;i<fVRunNum.size();++i){
-    int irun = fVRunNum[i];
-    AnalyzeRun(irun);
-  }
-  
-}
-//_________________________________________________
 void TDCEffPlot_NEOLITHs::AnalyzeRun(Int_t nRun, Long64_t neve)
 {
   TArtEventStore estore;
@@ -409,62 +400,6 @@ TGraph* TDCEffPlot_NEOLITHs::MakeGraph_MgeN(Int_t layer, Int_t multi)
 
   }
   return g;
-  
-}
-//_________________________________________________
-void TDCEffPlot_NEOLITHs::LoadRunListFile(TString fname)
-{
-  fRunListFilename = fname;
-
-  ifstream fs(fRunListFilename);
-  if ( fs.fail() ){
-    cout<<"Cannot open "<<fRunListFilename.Data()<<endl;
-    return;
-  }
-
-  std::map<int, double> runmap;
-  
-  vector<TString> str_line0;
-
-  string line;
-  int iline=0;
-  while(getline(fs,line,'\n')){
-
-    if (line[0]=='#') continue;
-
-    /* Scan one line */
-    int irun;
-    double hv;
-
-    istringstream ss(line);
-    ss>> irun >> hv;
-    ++iline;
-    
-    //cout<<"line-"<<iline << " "<<irun <<" "<<hv<<endl;
-
-    runmap[irun] = hv;
-
-  }
-
-  // sort by HV value
-  std::vector<pair<double,int>> vtmp;
-  std::map<int,double>::iterator it;
-
-  for (it = runmap.begin(); it != runmap.end(); it++){
-    vtmp.push_back({ it->second, it->first});
-  }
-  sort(vtmp.begin(), vtmp.end());
-
-  cout<<"Loading Run List..."<<endl;
-  for (auto& i: vtmp){
-    std::cout<< i.first <<" "
-	     << i.second <<" "
-	     <<std::endl;
-    
-    fVRunNum.push_back(i.second);
-    fVhv.push_back(i.first);
-  }
-  cout<<"Done"<<endl;
   
 }
 //_________________________________________________

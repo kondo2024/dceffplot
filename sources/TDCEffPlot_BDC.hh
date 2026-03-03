@@ -15,7 +15,6 @@ public:
   TDCEffPlot_BDC(Int_t iBDC=1);
   virtual ~TDCEffPlot_BDC();
 
-  virtual void AnalyzeAll();
   virtual void AnalyzeRun(Int_t nRun, Long64_t neve=0);
   virtual void Plot(Int_t layer);
 
