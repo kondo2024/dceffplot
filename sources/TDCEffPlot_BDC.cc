@@ -304,18 +304,23 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
     for (int layer=0;layer<fNlayer;++layer){
 
       if (!fVLayerName[layer].Contains(dir)) continue;
-    
-      TLine *l = new TLine(x,y,x+0.05,y);
-      l->SetLineColor(fPalette[layer]);
-      l->SetNDC(1);
-      tlist->Add(l);
 
-      TString text(fVLayerName[layer].Data());
-      TText *t = new TText(x+0.1,y,text.Data());
-      t->SetNDC(1);
-      t->SetTextAlign(12);
-      tlist->Add(t);
-      y -= 0.05;
+
+      for (int i=0;i<2;++i){
+	TLine *l = new TLine(x,y,x+0.05,y);
+	l->SetLineColor(fPalette[layer]);
+	if (i==1) l->SetLineStyle(2);
+	l->SetNDC(1);
+	tlist->Add(l);
+
+	TString text(fVLayerName[layer].Data());
+	if (i==1) text += " M1";
+	TText *t = new TText(x+0.07,y,text.Data());
+	t->SetNDC(1);
+	t->SetTextAlign(12);
+	tlist->Add(t);
+	y -= 0.05;
+      }
     }
 
   }
