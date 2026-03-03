@@ -302,7 +302,8 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
 
     double x = 0.12;
     double y = 0.85;
-  
+
+    int icol=0;
     for (int layer=0;layer<fNlayer;++layer){
 
       if (!fVLayerName[layer].Contains(dir)) continue;
