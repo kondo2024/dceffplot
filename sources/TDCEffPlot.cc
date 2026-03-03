@@ -94,6 +94,7 @@ void TDCEffPlot::LoadRunListFile(TString fname)
   sort(vtmp.begin(), vtmp.end());
 
   cout<<"Loading Run List..."<<endl;
+  cout<<"HV   Run"<<endl;
   for (auto& i: vtmp){
     std::cout<< i.first <<" "
 	     << i.second <<" "
@@ -102,8 +103,6 @@ void TDCEffPlot::LoadRunListFile(TString fname)
     fVRunNum.push_back(i.second);
     fVhv.push_back(i.first);
   }
-  cout<<"Done"<<endl;
-  
 }
 //_________________________________________________
 // return total efficiency if multi=0

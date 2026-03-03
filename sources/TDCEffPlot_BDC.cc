@@ -234,12 +234,7 @@ void TDCEffPlot_BDC::Plot(Int_t layer)
     y -= 0.05;
   }
 
-
-  if (layer<2){  // M>=3 for Ku,Ku
-    g[kMmax] = MakeGraph_MgeN(layer, 3);
-  }else{// M>=2 for Potential
-    g[kMmax] = MakeGraph_MgeN(layer, 2);
-  }
+  g[kMmax] = MakeGraph_MgeN(layer, 3);
   g[kMmax]->SetLineColor(2);
   g[kMmax]->SetLineStyle(2);
   g[kMmax]->SetMarkerColor(2);
@@ -251,11 +246,7 @@ void TDCEffPlot_BDC::Plot(Int_t layer)
   tlist->Add(l);
 
   TText *t;
-  if (layer<2){
-    t = new TText(x+0.1,y,"M>=3");
-  }else{
-    t = new TText(x+0.1,y,"M>=2");
-  }
+  t = new TText(x+0.1,y,"M>=3");
   t->SetNDC(1);
   t->SetTextAlign(12);
   tlist->Add(t);
