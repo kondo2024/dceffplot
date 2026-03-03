@@ -302,6 +302,9 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
     double y = 0.85;
   
     for (int layer=0;layer<fNlayer;++layer){
+
+      if (!fVLayerName[layer].Contains(dir)) continue;
+    
       TLine *l = new TLine(x,y,x+0.05,y);
       l->SetLineColor(fPalette[layer]);
       l->SetNDC(1);
