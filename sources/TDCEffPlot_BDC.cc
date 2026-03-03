@@ -260,7 +260,7 @@ void TDCEffPlot_BDC::Plot(Int_t layer)
   
 }
 //_________________________________________________
-void TDCEffPlot_BDC::PlotSummary_X()
+void TDCEffPlot_BDC::PlotSummary(TString dir)
 {
   if (fOutFile==0){
     fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
@@ -270,20 +270,18 @@ void TDCEffPlot_BDC::PlotSummary_X()
 
   // efficiency curve summary
   TCanvas *c1 = new TCanvas();
-  c1->SetName("cx");
-  c1->SetTitle(Form("BDC%i X",fBDCid));
+  TString str_temp = Form("c%s",dir.Data());
+  str_temp.ToLower();
+  c1->SetName(str_temp.Data());
+  c1->SetTitle(Form("BDC%i %s",fBDCid,dir.Data()));
   TList *tlist = new TList();
-  tlist->SetName(Form("bdc%ix",fBDCid));
+  tlist->SetName(Form("bdc%i%s",fBDCid,dir.Data()));
 
   TH1* hframe;
   TGraph *g[2];// Mall & M1
   for (int layer=0;layer<fNlayer;++layer){
 
-    if (fVLayerName[layer].Contains("X")){
-
-    }else{
-      continue;
-    }
+    if (!fVLayerName[layer].Contains(dir)) continue;
     
     for (int i=0;i<2;++i){
       g[i] = MakeGraph(layer,i);
@@ -291,7 +289,7 @@ void TDCEffPlot_BDC::PlotSummary_X()
       if (layer==0 && i==0){
 	hframe = g[0]->GetHistogram();
 	tlist->Add(hframe);
-	hframe->SetTitle(Form("bdc%ix",fBDCid));
+	hframe->SetTitle(Form("BDC%i %s layers",fBDCid,dir.Data()));
       }
 
       tlist->Add(g[i]);
@@ -300,25 +298,22 @@ void TDCEffPlot_BDC::PlotSummary_X()
       if (i==1) g[i]->SetLineStyle(2);
     }
 
-    
+    double x = 0.12;
+    double y = 0.85;
+  
+    for (int layer=0;layer<fNlayer;++layer){
+      TLine *l = new TLine(x,y,x+0.05,y);
+      l->SetLineColor(fPalette[layer]);
+      l->SetNDC(1);
+      tlist->Add(l);
 
-//    double x = 0.12;
-//    double y = 0.85;
-//  
-//    for (int i=0;i<2;++i){
-//      TLine *l = new TLine(x,y,x+0.05,y);
-//      l->SetLineColor(fPalette[layer]);
-//      l->SetNDC(1);
-//      tlist->Add(l);
-//
-//      TString text(Form("M%i",i));
-//      if (i==0) text = "Mall";
-//      TText *t = new TText(x+0.1,y,text.Data());
-//      t->SetNDC(1);
-//      t->SetTextAlign(12);
-//      tlist->Add(t);
-//      y -= 0.05;
-//    }
+      TString text(fVLayerName[layer].Data());
+      TText *t = new TText(x+0.1,y,text.Data());
+      t->SetNDC(1);
+      t->SetTextAlign(12);
+      tlist->Add(t);
+      y -= 0.05;
+    }
 
   }
   
