@@ -197,6 +197,7 @@ void TDCEffPlot_BDC::Plot(Int_t layer)
 
   fPlotItems = new TList();
 
+  // efficiency curve for each layer
   TCanvas *c1 = new TCanvas();
   c1->SetName(Form("c%d",layer));
   c1->SetTitle(fVLayerName[layer].Data());
@@ -260,5 +261,64 @@ void TDCEffPlot_BDC::Plot(Int_t layer)
   
 }
 //_________________________________________________
+void TDCEffPlot_BDC::PlotSummary_X()
+{
+  if (fOutFile==0){
+    fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
+  }
+  fOutFile->cd();
 
+  fPlotItems = new TList();
 
+  // efficiency curve summary
+  TCanvas *c1 = new TCanvas();
+  c1->SetName("cx");
+  c1->SetTitle(Form("BDC%i X",fBDCid));
+  TList *tlist = new TList();
+  tlist->SetName(Form("bdc%ix",fBDCid));
+
+  TGraph *g[2];// Mall & M1
+  for (int layer=0;layer<fNlayer;++layer){
+
+    if (fVLayerName[layer].Contains("X")){
+
+    }else{
+      continue;
+    }
+    
+    for (int i=0;i<2;++i){
+      g[i] = MakeGraph(layer,i);
+      tlist->Add(g[i]);
+      g[i]->SetLineColor(fPalette[layer]);
+      g[i]->SetMarkerColor(fPalette[layer]);
+      if (i==1) g[i]->SetLineStyle(2);
+    }
+
+//    double x = 0.12;
+//    double y = 0.85;
+//  
+//    for (int i=0;i<2;++i){
+//      TLine *l = new TLine(x,y,x+0.05,y);
+//      l->SetLineColor(fPalette[layer]);
+//      l->SetNDC(1);
+//      tlist->Add(l);
+//
+//      TString text(Form("M%i",i));
+//      if (i==0) text = "Mall";
+//      TText *t = new TText(x+0.1,y,text.Data());
+//      t->SetNDC(1);
+//      t->SetTextAlign(12);
+//      tlist->Add(t);
+//      y -= 0.05;
+//    }
+
+  }
+  
+  g[0]->Draw("APL");
+  tlist->Draw("PL");
+
+  Write(tlist);
+  Write(c1);
+
+}
+//_________________________________________________

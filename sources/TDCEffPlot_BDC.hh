@@ -18,6 +18,8 @@ public:
   virtual void AnalyzeRun(Int_t nRun, Long64_t neve=0);
   virtual void Plot(Int_t layer);
 
+  virtual void PlotSummary_X();
+  
 protected:
   Int_t fBDCid;
   TArtSAMURAIParameters* smprm;

@@ -150,7 +150,6 @@ TGraph* TDCEffPlot::MakeGraph(Int_t layer, Int_t multi)
     g->SetName(fVLayerName[layer]);
     g->SetTitle(Form("layer=%i %s",layer,fVLayerName[layer].Data()));
   }else{
-    g->SetName(Form("layer%i",layer));
     g->SetName(Form("layer=%i",layer));    
   }
   g->SetMinimum(0);
