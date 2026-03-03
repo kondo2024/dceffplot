@@ -277,7 +277,7 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
   TList *tlist = new TList();
   tlist->SetName(Form("bdc%i%s",fBDCid,dir.Data()));
 
-  TH1* hframe;
+  TH1* hframe = 0;
   TGraph *g[2];// Mall & M1
   for (int layer=0;layer<fNlayer;++layer){
 
@@ -286,7 +286,7 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
     for (int i=0;i<2;++i){
       g[i] = MakeGraph(layer,i);
 
-      if (layer==0 && i==0){
+      if (hframe==0 && i==0){
 	hframe = g[0]->GetHistogram();
 	tlist->Add(hframe);
 	hframe->SetTitle(Form("BDC%i %s layers",fBDCid,dir.Data()));
