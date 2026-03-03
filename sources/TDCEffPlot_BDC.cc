@@ -192,10 +192,9 @@ void TDCEffPlot_BDC::Plot(Int_t layer)
 {
   if (fOutFile==0){
     fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
+    fPlotItems = new TList();
   }
   fOutFile->cd();
-
-  fPlotItems = new TList();
 
   // efficiency curve for each layer
   TCanvas *c1 = new TCanvas();
@@ -265,10 +264,9 @@ void TDCEffPlot_BDC::PlotSummary_X()
 {
   if (fOutFile==0){
     fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
+    fPlotItems = new TList();
   }
   fOutFile->cd();
-
-  fPlotItems = new TList();
 
   // efficiency curve summary
   TCanvas *c1 = new TCanvas();
@@ -277,6 +275,7 @@ void TDCEffPlot_BDC::PlotSummary_X()
   TList *tlist = new TList();
   tlist->SetName(Form("bdc%ix",fBDCid));
 
+  TH1* hframe;
   TGraph *g[2];// Mall & M1
   for (int layer=0;layer<fNlayer;++layer){
 
@@ -288,11 +287,20 @@ void TDCEffPlot_BDC::PlotSummary_X()
     
     for (int i=0;i<2;++i){
       g[i] = MakeGraph(layer,i);
+
+      if (layer==0 && i==0){
+	hframe = g[0]->GetHistogram();
+	tlist->Add(hframe);
+	hframe->SetTitle(Form("bdc%ix",fBDCid));
+      }
+
       tlist->Add(g[i]);
       g[i]->SetLineColor(fPalette[layer]);
       g[i]->SetMarkerColor(fPalette[layer]);
       if (i==1) g[i]->SetLineStyle(2);
     }
+
+    
 
 //    double x = 0.12;
 //    double y = 0.85;
@@ -314,7 +322,7 @@ void TDCEffPlot_BDC::PlotSummary_X()
 
   }
   
-  g[0]->Draw("APL");
+  hframe->Draw("AP");
   tlist->Draw("PL");
 
   Write(tlist);
