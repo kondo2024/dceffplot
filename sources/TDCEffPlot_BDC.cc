@@ -317,6 +317,7 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
 	if (i==1) text += " M1";
 	TText *t = new TText(x+0.07,y,text.Data());
 	t->SetNDC(1);
+	t->SetTextSize(0.03);
 	t->SetTextAlign(12);
 	tlist->Add(t);
 	y -= 0.05;
