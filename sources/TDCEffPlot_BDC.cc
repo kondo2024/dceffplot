@@ -278,10 +278,12 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
   tlist->SetName(Form("bdc%i%s",fBDCid,dir.Data()));
 
   TH1* hframe = 0;
+  int icol=0;
   TGraph *g[2];// Mall & M1
   for (int layer=0;layer<fNlayer;++layer){
 
     if (!fVLayerName[layer].Contains(dir)) continue;
+    icol++;
     
     for (int i=0;i<2;++i){
       g[i] = MakeGraph(layer,i);
@@ -293,8 +295,8 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
       }
 
       tlist->Add(g[i]);
-      g[i]->SetLineColor(fPalette[layer]);
-      g[i]->SetMarkerColor(fPalette[layer]);
+      g[i]->SetLineColor(fPalette[icol]);
+      g[i]->SetMarkerColor(fPalette[icol]);
       if (i==1) g[i]->SetLineStyle(2);
     }
 
@@ -304,11 +306,11 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
     for (int layer=0;layer<fNlayer;++layer){
 
       if (!fVLayerName[layer].Contains(dir)) continue;
-
+      icol++;
 
       for (int i=0;i<2;++i){
 	TLine *l = new TLine(x,y,x+0.05,y);
-	l->SetLineColor(fPalette[layer]);
+	l->SetLineColor(fPalette[icol]);
 	if (i==1) l->SetLineStyle(2);
 	l->SetNDC(1);
 	tlist->Add(l);
