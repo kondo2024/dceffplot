@@ -19,7 +19,7 @@ public:
 
   virtual void LoadRunListFile(TString fname);
   virtual void AnalyzeAll();
-  virtual void AnalyzeRun(Int_t irun) = 0;
+  virtual void AnalyzeRun(Int_t irun, Long64_t neve=0) = 0;
   virtual void Plot(Int_t layer) = 0;
   virtual void Write(TObject* obj);
 
