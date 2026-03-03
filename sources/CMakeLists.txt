@@ -38,6 +38,8 @@ add_definitions(${ROOT_CXX_FLAGS})
 
 file(GLOB SRC_FILES "*.cc")
 file(GLOB INC_FILES "*.hh")
+file(GLOB_RECURSE TINC_FILES ${CMAKE_CURRENT_SOURCE_DIR} T*.hh)
+list(FILTER TINC_FILES EXCLUDE REGEX ".*linkdef.hh$")
 
 add_library(dceffplot SHARED ${SRC_FILES} G__dceffplot.cxx)
 
@@ -57,12 +59,13 @@ file(APPEND dceffplot_linkdef.hh "#pragma link off all functions;\n")
 
 list(APPEND CMAKE_MESSAGE_INDENT "  ")
 foreach(loop_var IN LISTS INC_FILES)
-  message(STATUS "${loop_var}")
   get_filename_component(loop_var_filename "${loop_var}" NAME_WE)
 
   if(${loop_var_filename} STREQUAL "dceffplot_linkdef")
     continue()
   endif()
+
+  message(STATUS "${loop_var}")
   
   file(APPEND dceffplot_linkdef.hh "#pragma link C++ class ${loop_var_filename}+;\n")
 endforeach()
@@ -70,7 +73,7 @@ list(POP_BACK CMAKE_MESSAGE_INDENT)
 file(APPEND dceffplot_linkdef.hh "#endif\n")
 
 ROOT_GENERATE_DICTIONARY(G__dceffplot
-  ${INC_FILES}      
+  ${TINC_FILES}      
   LINKDEF dceffplot_linkdef.hh
 )
 ###  ---------------------------

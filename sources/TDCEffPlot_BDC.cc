@@ -21,21 +21,25 @@
 
 using namespace std;
 //_________________________________________________
-TDCEffPlot_BDC::TDCEffPlot_BDC()
+TDCEffPlot_BDC::TDCEffPlot_BDC(Int_t iBDC)
+  : fBDCid(iBDC)
 {
+  fROOTfileName = Form("eff_bdc%i.root",fBDCid);
+
   smprm = TArtSAMURAIParameters::Instance();
-  smprm->LoadParameter("db/SAMURAIBDC1.xml");
-  fCalibBDCHit = new TArtCalibBDC1Hit;
+  smprm->LoadParameter(Form("db/SAMURAIBDC%i.xml",fBDCid));
+  if       (fBDCid==1) fCalibBDC1Hit = new TArtCalibBDC1Hit;
+  else if  (fBDCid==2) fCalibBDC2Hit = new TArtCalibBDC2Hit;
 
   fNlayer = 8;
-  fVLayerName[0] = "X1";
-  fVLayerName[1] = "X1P";
-  fVLayerName[2] = "Y1";
-  fVLayerName[3] = "Y1P";
-  fVLayerName[4] = "X2";
-  fVLayerName[5] = "X2P";
-  fVLayerName[6] = "Y2";
-  fVLayerName[7] = "Y2P";
+  fVLayerName[0] = Form("BDC%i X1", fBDCid);
+  fVLayerName[1] = Form("BDC%i X1P",fBDCid);
+  fVLayerName[2] = Form("BDC%i Y1", fBDCid);
+  fVLayerName[3] = Form("BDC%i Y1P",fBDCid);
+  fVLayerName[4] = Form("BDC%i X2", fBDCid);
+  fVLayerName[5] = Form("BDC%i X2P",fBDCid);
+  fVLayerName[6] = Form("BDC%i Y2", fBDCid);
+  fVLayerName[7] = Form("BDC%i Y2P",fBDCid);
   
 }
 //_________________________________________________
@@ -58,7 +62,7 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
 		  fRIDFfileName.Data(),nRun),"RECREATE");
 
   // for check
-  TH1* hidtl1 = new TH2D("hidtl1","BDC ID Tleading",128,0.5,128.5, 100,0,30000);
+  TH1* hidtl1 = new TH2D("hidtl1",Form("BDC%i ID Tleading",fBDCid),128,0.5,128.5, 100,0,30000);
   
   std::vector<TH1*> hmulti;
   std::vector<TH1*> htl;
@@ -70,7 +74,7 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
   // multipliticy
   for (int ilayer=0;ilayer<fNlayer;++ilayer){
     TString lname = fVLayerName[ilayer];
-    htmp = new TH1D(Form("hmulti%i",ilayer),Form("Multiplicity BDC Layer=%i %s",ilayer, lname.Data()),
+    htmp = new TH1D(Form("hmulti%i",ilayer),Form("Multiplicity BDC%i Layer=%i %s",fBDCid,ilayer, lname.Data()),
 		   10,-0.5,9.5);
     hmulti.push_back(htmp);
   }
@@ -78,7 +82,7 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
   // T leading
   for (int ilayer=0;ilayer<fNlayer;++ilayer){
     TString lname = fVLayerName[ilayer];
-    htmp = new TH1D(Form("htl%i",ilayer),Form("T leading Layer=%i %s",ilayer, lname.Data()),
+    htmp = new TH1D(Form("htl%i",ilayer),Form("BDC%i T leading Layer=%i %s",fBDCid,ilayer, lname.Data()),
 			   2000,-5000,5000);
     htl.push_back(htmp);
   }
@@ -86,7 +90,7 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
   // T trailing
   for (int ilayer=0;ilayer<fNlayer;++ilayer){
     TString lname = fVLayerName[ilayer];
-    htmp = new TH1D(Form("htt%i",ilayer),Form("T trailing Layer=%i %s",ilayer, lname.Data()),
+    htmp = new TH1D(Form("htt%i",ilayer),Form("BDC%i T trailing Layer=%i %s",fBDCid,ilayer, lname.Data()),
 		    2000,-5000,5000);
     htt.push_back(htmp);
   }
@@ -94,7 +98,7 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
   // TOT
   for (int ilayer=0;ilayer<fNlayer;++ilayer){
     TString lname = fVLayerName[ilayer];
-    htmp = new TH1D(Form("htot%i",ilayer),Form("ToT Layer=%i %s",ilayer, lname.Data()),
+    htmp = new TH1D(Form("htot%i",ilayer),Form("BDC%i ToT Layer=%i %s",fBDCid,ilayer, lname.Data()),
 		   2000,0,20000);
     htot.push_back(htmp);
   }
@@ -111,12 +115,15 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
 
     for (int i=0;i<fNlayer;++i) multi[i]=0;
 
-    
-    fCalibBDCHit->ReconstructData();
 
+    if      (fBDCid==1) fCalibBDC1Hit->ReconstructData();
+    else if (fBDCid==2) fCalibBDC2Hit->ReconstructData();
     
     // BDC Hit
-    TClonesArray *hit_array = fCalibBDCHit->GetDCHitArray();
+    TClonesArray *hit_array = 0;
+    if      (fBDCid==1) hit_array = fCalibBDC1Hit->GetDCHitArray();
+    else if (fBDCid==2) hit_array = fCalibBDC2Hit->GetDCHitArray();
+
     int n=hit_array->GetEntries();
     for (int i=0;i<n;++i){
       TArtDCHit *hit = (TArtDCHit*)hit_array->At(i);
@@ -139,7 +146,8 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
     }
 
     estore.ClearData();
-    fCalibBDCHit->ClearData();
+    if      (fBDCid==1) fCalibBDC1Hit->ClearData();
+    else if (fBDCid==2) fCalibBDC2Hit->ClearData();
     ieve++;
 
     if (neve>0){

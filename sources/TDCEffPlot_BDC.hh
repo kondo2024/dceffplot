@@ -7,26 +7,24 @@
 
 #include "TArtSAMURAIParameters.hh"
 #include "TArtCalibBDC1Hit.hh"
+#include "TArtCalibBDC2Hit.hh"
 
 class TDCEffPlot_BDC : public TDCEffPlot
 {
 public:
-  TDCEffPlot_BDC();
+  TDCEffPlot_BDC(Int_t iBDC=1);
   virtual ~TDCEffPlot_BDC();
 
   virtual void LoadRunListFile(TString fname);
   virtual void AnalyzeAll();
   virtual void AnalyzeRun(Int_t nRun, Long64_t neve=0);
   virtual void Plot(Int_t layer);
-//  virtual void Write(TObject *obj);
-//  virtual Double_t GetEffMulti(Int_t layer, Int_t multi);
-//  virtual Double_t GetEffMultiGeN(Int_t layer, Int_t multi);
-//  virtual TGraph* MakeGraph(Int_t layer, Int_t multi);
-//  virtual TGraph* MakeGraph_MgeN(Int_t layer, Int_t multi);
 
 protected:
+  Int_t fBDCid;
   TArtSAMURAIParameters* smprm;
   TArtCalibBDC1Hit *fCalibBDC1Hit;
+  TArtCalibBDC2Hit *fCalibBDC2Hit;
   
   static const int kMmax = 6;
 
