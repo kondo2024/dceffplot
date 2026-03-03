@@ -17,7 +17,7 @@ public:
   TDCEffPlot();
   virtual ~TDCEffPlot();
 
-  virtual void LoadRunListFile(TString fname) = 0;
+  virtual void LoadRunListFile(TString fname);
   virtual void AnalyzeAll();
   virtual void AnalyzeRun(Int_t irun) = 0;
   virtual void Plot(Int_t layer) = 0;
