@@ -193,9 +193,9 @@ void TDCEffPlot_BDC::Plot(Int_t layer)
   if (fOutFile==0){
     fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
   }
-  fPlotItems = new TList();
-
   fOutFile->cd();
+
+  fPlotItems = new TList();
 
   TCanvas *c1 = new TCanvas();
   c1->SetName(Form("c%d",layer));
