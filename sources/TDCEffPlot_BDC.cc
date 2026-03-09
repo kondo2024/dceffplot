@@ -12,6 +12,7 @@
 #include "TLine.h"
 #include "TText.h"
 #include "TCanvas.h"
+#include "TPad.h"
 #include "TDirectory.h"
 
 #include "TArtEventStore.hh"
@@ -281,7 +282,8 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
   fOutFile->cd();
 
   // efficiency curve summary
-  TCanvas *c1 = new TCanvas();
+  //TCanvas *c1 = new TCanvas();
+  TPad *c1 = new TPad();
   TString str_temp = Form("c%s",dir.Data());
   str_temp.ToLower();
   c1->SetName(str_temp.Data());
@@ -356,6 +358,7 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
   tlist->Draw();
 
   Write(tlist);
+
   Write(c1);
 
 }
