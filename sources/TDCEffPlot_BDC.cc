@@ -23,7 +23,7 @@
 using namespace std;
 //_________________________________________________
 TDCEffPlot_BDC::TDCEffPlot_BDC(Int_t iBDC)
-  : TDCEffPlot(), fBDCid(iBDC)
+  : TDCEffPlot(), fBDCid(iBDC), fNwire(128)
 {
   fROOTfileName = Form("eff_bdc%i.root",fBDCid);
 
@@ -81,7 +81,7 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
   TFile fout(foutname.Data(),"RECREATE");
 
   // for check
-  TH1* hidtl1 = new TH2D("hidtl1",Form("BDC%i ID Tleading",fBDCid),128,0.5,128.5, 100,0,30000);
+  TH1* hidtl1 = new TH2D("hidtl1",Form("BDC%i ID Tleading",fBDCid),fNwire,0.5,0.5+fNwire, 100,0,30000);
   
   std::vector<TH1*> hmulti;
   std::vector<TH1*> htl;
@@ -366,5 +366,6 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
   Write(tlist);
   Write(c1);
 
+  cout<<"Efficiency curves are saved in "<<fOutFile->GetName()<<endl;
 }
 //_________________________________________________

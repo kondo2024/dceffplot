@@ -49,6 +49,9 @@ TDCEffPlot_FDC::TDCEffPlot_FDC(Int_t iFDC)
   fVLayerName[13] = Form("FDC%i X3P",fFDCid);
 
   fHistfileName = Form("fdc%ihist",fFDCid);
+
+  if       (fFDCid==1) fNwire = 448;
+  else if  (fFDCid==2) fNwire = 1568;
   
 }
 //_________________________________________________
@@ -87,7 +90,7 @@ void TDCEffPlot_FDC::AnalyzeRun(Int_t nRun, Long64_t neve)
   TFile fout(foutname.Data(),"RECREATE");
 
   // for check
-  TH1* hidtl1 = new TH2D("hidtl1",Form("FDC%i ID Tleading",fFDCid),128,0.5,128.5, 100,0,30000);
+  TH1* hidtl1 = new TH2D("hidtl1",Form("FDC%i ID Tleading",fFDCid),fNwire,0.5,0.5+fNwire, 100,0,30000);
   
   std::vector<TH1*> hmulti;
   std::vector<TH1*> htl;
@@ -372,5 +375,7 @@ void TDCEffPlot_FDC::PlotSummary(TString dir)
   Write(tlist);
   Write(c1);
 
+  cout<<"Efficiency curves are saved in "<<fOutFile->GetName()<<endl;
+  
 }
 //_________________________________________________

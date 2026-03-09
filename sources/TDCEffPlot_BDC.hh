@@ -28,7 +28,9 @@ protected:
   
   static const int kMmax = 6;
 
-  TList *fPlotItems;
+  int fNwire;
+  
+  //TList *fPlotItems;
   
   ClassDef(TDCEffPlot_BDC, 1)
 };
