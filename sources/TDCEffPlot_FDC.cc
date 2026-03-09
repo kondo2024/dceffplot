@@ -314,7 +314,6 @@ void TDCEffPlot_FDC::PlotSummary(TString dir)
   for (int layer=0;layer<fNlayer;++layer){
 
     if (!fVLayerName[layer].Contains(dir)) continue;
-    icol++;
     
     for (int i=0;i<2;++i){
       g[i] = MakeGraph(layer,i);
@@ -341,6 +340,9 @@ void TDCEffPlot_FDC::PlotSummary(TString dir)
 
       g[i]->Draw("PL");
       fOutFile->Add(g[i]);
+
+      icol++;
+      
     }
 
     double x = 0.12;
@@ -350,7 +352,6 @@ void TDCEffPlot_FDC::PlotSummary(TString dir)
     for (int layer=0;layer<fNlayer;++layer){
 
       if (!fVLayerName[layer].Contains(dir)) continue;
-      icol++;
 
       for (int i=0;i<2;++i){
 	TLine *l = new TLine(x,y,x+0.05,y);
@@ -368,6 +369,9 @@ void TDCEffPlot_FDC::PlotSummary(TString dir)
 	tlist->Add(t);
 	y -= 0.05;
       }
+
+      icol++;
+      
     }
 
   }
