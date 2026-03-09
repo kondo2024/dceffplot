@@ -7,7 +7,7 @@ analyze run and make plot of efficiency curve of a drift chamber.
 - ANAROOT
 
 ## how to install
-<code>$ cd dceffplot
+<code>$ cd dceffplot</code>
 
 in case TARTSYS is not defined, modify setup.sh and run it.(<code>$ source setup.sh</code>)
 
