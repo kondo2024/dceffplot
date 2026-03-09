@@ -211,6 +211,8 @@ void TDCEffPlot_FDC::AnalyzeRun(Int_t nRun, Long64_t neve)
   fout.Write();
   fout.Close();
 
+  cout<<"Histograms are saved in "<<fout.GetName()<<endl;
+  
 }
 //_________________________________________________
 void TDCEffPlot_FDC::Plot(Int_t layer)
