@@ -301,11 +301,11 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
     
     for (int i=0;i<2;++i){
       g[i] = MakeGraph(layer,i);
+      g[i]->SetMinimum(0);
+      g[i]->SetMaximum(110);
 
       if (hframe==0 && i==0){
 	hframe = g[0]->GetHistogram();
-	hframe->SetMinimum(0);
-	hframe->SetMaximum(110);
 	tlist->Add(hframe);
 	hframe->SetTitle(Form("BDC%i %s layers",fBDCid,dir.Data()));
       }
