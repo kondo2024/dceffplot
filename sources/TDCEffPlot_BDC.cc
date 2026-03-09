@@ -345,7 +345,7 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
 
   }
   
-  hframe->Draw("AP");
+  hframe->Draw();
   tlist->Draw("PL");
 
   Write(tlist);
