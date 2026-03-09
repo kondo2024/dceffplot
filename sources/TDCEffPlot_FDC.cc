@@ -32,15 +32,21 @@ TDCEffPlot_FDC::TDCEffPlot_FDC(Int_t iFDC)
   if       (fFDCid==1) fCalibFDC1Hit = new TArtCalibFDC1Hit;
   else if  (fFDCid==2) fCalibFDC2Hit = new TArtCalibFDC2Hit;
 
-  fNlayer = 8;
-  fVLayerName[0] = Form("FDC%i X1", fFDCid);
-  fVLayerName[1] = Form("FDC%i X1P",fFDCid);
-  fVLayerName[2] = Form("FDC%i Y1", fFDCid);
-  fVLayerName[3] = Form("FDC%i Y1P",fFDCid);
-  fVLayerName[4] = Form("FDC%i X2", fFDCid);
-  fVLayerName[5] = Form("FDC%i X2P",fFDCid);
-  fVLayerName[6] = Form("FDC%i Y2", fFDCid);
-  fVLayerName[7] = Form("FDC%i Y2P",fFDCid);
+  fNlayer = 14;
+  fVLayerName[0]  = Form("FDC%i X1", fFDCid);
+  fVLayerName[1]  = Form("FDC%i X1P",fFDCid);
+  fVLayerName[2]  = Form("FDC%i U1", fFDCid);
+  fVLayerName[3]  = Form("FDC%i U1P",fFDCid);
+  fVLayerName[4]  = Form("FDC%i V1", fFDCid);
+  fVLayerName[5]  = Form("FDC%i V1P",fFDCid);
+  fVLayerName[6]  = Form("FDC%i X2", fFDCid);
+  fVLayerName[7]  = Form("FDC%i X2P",fFDCid);
+  fVLayerName[8]  = Form("FDC%i U2", fFDCid);
+  fVLayerName[9]  = Form("FDC%i U2P",fFDCid);
+  fVLayerName[10] = Form("FDC%i V2", fFDCid);
+  fVLayerName[11] = Form("FDC%i V2P",fFDCid);
+  fVLayerName[12] = Form("FDC%i X3", fFDCid);
+  fVLayerName[13] = Form("FDC%i X3P",fFDCid);
   
 }
 //_________________________________________________
