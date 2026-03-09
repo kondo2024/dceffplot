@@ -81,7 +81,7 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
   TFile fout(foutname.Data(),"RECREATE");
 
   // for check
-  TH1* hidtl1 = new TH2D("hidtl1",Form("BDC%i ID Tleading",fBDCid),fNwire,0.5,0.5+fNwire, 100,0,30000);
+  TH1* hidtl = new TH2D("hidtl",Form("BDC%i ID Tleading",fBDCid),fNwire,0.5,0.5+fNwire, 100,0,30000);
   
   std::vector<TH1*> hmulti;
   std::vector<TH1*> htl;
@@ -151,6 +151,7 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
       Double_t tlraw = hit->GetTDC();
       Double_t ttraw = hit->GetTrailTDC();
 
+      hidtl->Fill(id,tlraw);
       htl[layer]->Fill(tlraw);
       htt[layer]->Fill(ttraw);
       
