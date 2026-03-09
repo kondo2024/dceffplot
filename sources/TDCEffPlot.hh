@@ -61,7 +61,7 @@ protected:
   int fNlayer;
   std::map<int,TString> fVLayerName;// key is layer num
 
-  int fPalette[10];
+  std::vector<int> fPalette;
   
   ClassDef(TDCEffPlot, 1)
 };

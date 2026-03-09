@@ -28,7 +28,12 @@ TDCEffPlot::TDCEffPlot()
   fPalette[7] = 9;
   fPalette[8] = 45;
   fPalette[9] = 30;
+  fPalette[10] = 38;
+  fPalette[11] = 42;
+  fPalette[12] = 49;
+  fPalette[13] = 40;
 
+  
 }
 //_________________________________________________
 TDCEffPlot::~TDCEffPlot()
