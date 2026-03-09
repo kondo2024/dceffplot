@@ -51,8 +51,10 @@ TDCEffPlot_BDC::~TDCEffPlot_BDC()
 void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
 {
 
-  TString foutname = Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
-			  fRIDFfileName.Data(),nRun);
+  TString foutname = Form("%s/%s_bdc%i_ana%04d.root",fROOTfileDir.Data(),
+			  fRIDFfileName.Data(),
+			  fBDCid,
+			  nRun);
 
   std::ifstream fchk(foutname.Data());
   if (fchk.good()){
