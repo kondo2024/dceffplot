@@ -1,6 +1,6 @@
 # dceffplot
 
-analyze and make plot of efficiency curve of a drift chamber.
+analyze run and make plot of efficiency curve of a drift chamber.
 
 ## Requirements
 - ROOT v6
@@ -8,10 +8,8 @@ analyze and make plot of efficiency curve of a drift chamber.
 
 ## how to install
 <code>$ cd dceffplot
-$ emacs setup.sh (modify environmental values)</code>
 
-in case TARTSYS is not defined, modify setup.sh and run it.
-<code>$ source setup.sh</code>
+in case TARTSYS is not defined, modify setup.sh and run it.(<code>$ source setup.sh</code>)
 
 <code>$ mkdir build
 $ mkdir install
@@ -25,7 +23,7 @@ $ make install</code>
 1. $ root[] .L dceffplot/install/lib/dceffplot.so
 1. $ root[] run_xxx.cc
 
-(incase of NEOLITH)
+(in case of NEOLITH)
 - modify map.txt
 
 
