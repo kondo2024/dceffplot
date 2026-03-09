@@ -12,6 +12,7 @@ TDCEffPlot::TDCEffPlot()
     fRIDFfileName("dceff"),
     fRIDFfileExt("ridf"),
     fROOTfileDir("root"),
+    fHistfileName("hist"),
     fROOTfileName("eff_dc.root"),
     fOutFile(0),
     fHistName("hmulti"),
@@ -173,8 +174,12 @@ TGraph* TDCEffPlot::MakeGraph(Int_t layer, Int_t multi)
     double hv = fVhv[i];
     int n = g->GetN();
 
-    TFile file(Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
-		    fRIDFfileName.Data(),irun));
+//    TFile file(Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
+//		    fRIDFfileName.Data(),irun));
+    TFile file(Form("%s/%s_%s_%04d.root",fROOTfileDir.Data(),
+		    fRIDFfileName.Data(),
+		    fHistfileName.Data(),
+		    irun));
 
     double eff = GetEffMulti(layer,multi);
     g->SetPoint(n,hv,eff);    
@@ -205,8 +210,12 @@ TGraph* TDCEffPlot::MakeGraph_MgeN(Int_t layer, Int_t multi)
     double hv = fVhv[i];
     int n = g->GetN();
 
-    TFile file(Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
-		    fRIDFfileName.Data(),irun));
+//    TFile file(Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
+//		    fRIDFfileName.Data(),irun));
+    TFile file(Form("%s/%s_%s_%04d.root",fROOTfileDir.Data(),
+		    fRIDFfileName.Data(),
+		    fHistfileName.Data(),
+		    irun));
     double eff = GetEffMultiGeN(layer,multi);
     
     g->SetPoint(n,hv,eff);

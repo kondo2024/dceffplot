@@ -23,7 +23,7 @@
 using namespace std;
 //_________________________________________________
 TDCEffPlot_BDC::TDCEffPlot_BDC(Int_t iBDC)
-  : fBDCid(iBDC)
+  : TDCEffPlot(), fBDCid(iBDC)
 {
   fROOTfileName = Form("eff_bdc%i.root",fBDCid);
 
@@ -41,6 +41,8 @@ TDCEffPlot_BDC::TDCEffPlot_BDC(Int_t iBDC)
   fVLayerName[5] = Form("BDC%i X2P",fBDCid);
   fVLayerName[6] = Form("BDC%i Y2", fBDCid);
   fVLayerName[7] = Form("BDC%i Y2P",fBDCid);
+
+  fHistfileName = Form("bdc%ihist",fBDCid);
   
 }
 //_________________________________________________
@@ -51,9 +53,9 @@ TDCEffPlot_BDC::~TDCEffPlot_BDC()
 void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
 {
 
-  TString foutname = Form("%s/%s_bdc%i_ana%04d.root",fROOTfileDir.Data(),
+  TString foutname = Form("%s/%s_%s_%04d.root",fROOTfileDir.Data(),
 			  fRIDFfileName.Data(),
-			  fBDCid,
+			  fHistfileName.Data(),
 			  nRun);
 
   std::ifstream fchk(foutname.Data());

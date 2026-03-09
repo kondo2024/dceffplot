@@ -43,6 +43,7 @@ protected:
   TString fRIDFfileName;
   TString fRIDFfileExt;
   TString fROOTfileDir;
+  TString fHistfileName;
   TString fROOTfileName;
   TList* fFilenameList;
   TFile *fOutFile;
