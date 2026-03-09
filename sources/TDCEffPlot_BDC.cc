@@ -366,6 +366,7 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
   Write(tlist);
   Write(c1);
 
-  cout<<"Efficiency curves are saved in "<<fOutFile->GetName()<<endl;
+  cout<<"Efficiency curves ("<<c1->GetName()<<")for "<<dir.Data()
+      <<" planes are saved in "<<fOutFile->GetName()<<endl;
 }
 //_________________________________________________
