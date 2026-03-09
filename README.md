@@ -7,21 +7,15 @@ analyze and make plot of efficiency curve of a drift chamber.
 - ANAROOT
 
 ## how to install
-<code>
-$ cd dceffplot
-$ emacs setup.sh (modify environmental values)
-</code>
+<code>$ cd dceffplot
+$ emacs setup.sh (modify environmental values)</code>
 in case TARTSYS is not defined, modify setup.sh and run it.
-<code>
-$ source setup.sh
-</code>
-<code>
-$ mkdir build
+<code>$ source setup.sh</code>
+<code>$ mkdir build
 $ mkdir install
 $ cd build
 $ cmake -DCMAKE_INSTALL_PREFIX=../install ../sources
-$ make install
-</code>
+$ make install</code>
 
 ## how to use
 1. modify map.txt and runlist.txt for your setup
