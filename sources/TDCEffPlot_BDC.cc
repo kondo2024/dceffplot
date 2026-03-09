@@ -348,7 +348,7 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
   hframe->SetTitle(Form("BDC%i %s layers",fBDCid,dir.Data()));
 
   hframe->Draw();
-  tlist->Draw("PL");
+  tlist->Draw("PLsame");
 
   Write(tlist);
   Write(c1);
