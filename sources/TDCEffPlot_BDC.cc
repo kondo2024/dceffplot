@@ -206,7 +206,6 @@ void TDCEffPlot_BDC::Plot(Int_t layer)
 {
   if (fOutFile==0){
     fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
-    fPlotItems = new TList();
   }
   fOutFile->cd();
 
@@ -278,7 +277,6 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
 {
   if (fOutFile==0){
     fOutFile = new TFile(Form("%s/%s",fROOTfileDir.Data(), fROOTfileName.Data()),"recreate");
-    fPlotItems = new TList();
   }
   fOutFile->cd();
 
@@ -301,13 +299,29 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
     
     for (int i=0;i<2;++i){
       g[i] = MakeGraph(layer,i);
+      if (i==0) g[i]->SetName(Form("gbdc%i_%i",fBDCid,layer));
+      else      g[i]->SetName(Form("gbdc%i_%i_m1",fBDCid,layer));
       g[i]->SetMinimum(0);
       g[i]->SetMaximum(110);
 
-      tlist->Add(g[i]);
       g[i]->SetLineColor(fPalette[icol]);
       g[i]->SetMarkerColor(fPalette[icol]);
       if (i==1) g[i]->SetLineStyle(2);
+      
+      if (hframe==0){
+	g[0]->Draw();
+	gPad->Update();
+
+	hframe = g[0]->GetHistogram();
+	hframe->SetTitle(Form("BDC%i %s layers",fBDCid,dir.Data()));
+	hframe->SetMinimum(0);
+	hframe->SetMaximum(110);
+
+	hframe->Draw();
+      }
+
+      g[i]->Draw("PL");
+      fOutFile->Add(g[i]);
     }
 
     double x = 0.12;
@@ -339,16 +353,7 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
 
   }
   
-  g[0]->Draw();
-  g[0]->SetMinimum(0);
-  g[0]->SetMaximum(110);
-
-  hframe = g[0]->GetHistogram();
-  tlist->Add(hframe);
-  hframe->SetTitle(Form("BDC%i %s layers",fBDCid,dir.Data()));
-
-  hframe->Draw();
-  tlist->Draw("PLsame");
+  tlist->Draw();
 
   Write(tlist);
   Write(c1);
