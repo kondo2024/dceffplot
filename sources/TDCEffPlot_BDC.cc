@@ -301,14 +301,8 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
     
     for (int i=0;i<2;++i){
       g[i] = MakeGraph(layer,i);
-//      g[i]->SetMinimum(0);
-//      g[i]->SetMaximum(110);
-
-      if (hframe==0 && i==0){
-	hframe = g[0]->GetHistogram();
-	tlist->Add(hframe);
-	hframe->SetTitle(Form("BDC%i %s layers",fBDCid,dir.Data()));
-      }
+      g[i]->SetMinimum(0);
+      g[i]->SetMaximum(110);
 
       tlist->Add(g[i]);
       g[i]->SetLineColor(fPalette[icol]);
@@ -345,10 +339,16 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
 
   }
   
+  g[0]->Draw();
+  g[0]->SetMinimum(0);
+  g[0]->SetMaximum(110);
+
+  hframe = g[0]->GetHistogram();
+  tlist->Add(hframe);
+  hframe->SetTitle(Form("BDC%i %s layers",fBDCid,dir.Data()));
+
   hframe->Draw();
-  hframe->SetMinimum(0);
-  hframe->SetMaximum(110);
-  tlist->Draw("PL");
+  xtlist->Draw("PL");
 
   Write(tlist);
   Write(c1);
