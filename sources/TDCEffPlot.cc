@@ -14,7 +14,8 @@ TDCEffPlot::TDCEffPlot()
     fROOTfileDir("root"),
     fROOTfileName("eff_dc.root"),
     fOutFile(0),
-    fHistName("hmulti")
+    fHistName("hmulti"),
+    fROOTfileOverwrite(true)
 {
   // set Color palette
   fPalette[0] = 2;

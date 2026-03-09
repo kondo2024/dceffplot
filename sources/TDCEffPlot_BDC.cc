@@ -49,6 +49,21 @@ TDCEffPlot_BDC::~TDCEffPlot_BDC()
 //_________________________________________________
 void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
 {
+
+  TString foutname = Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
+			  fRIDFfileName.Data(),nRun);
+
+  std::ifstream fchk(foutname.Data());
+  if (fchk.good()){
+    std::cout<<"File exists: "<<foutname.Data()<<std::flush;
+    if (!ROOTfileOverwrite()){
+      std::cout<<" -> Skip"<<std::endl;
+      return;
+    }else{
+      std::cout<<" -> Update"<<std::endl;
+    }
+  }
+  
   TArtEventStore estore;
   if (nRun==0){
     estore.Open(0);// online data
@@ -58,8 +73,7 @@ void TDCEffPlot_BDC::AnalyzeRun(Int_t nRun, Long64_t neve)
   }
   TArtRawEventObject *rawevent = estore.GetRawEventObject();
 
-  TFile fout(Form("%s/%s_ana%04d.root",fROOTfileDir.Data(),
-		  fRIDFfileName.Data(),nRun),"RECREATE");
+  TFile fout(foutname.Data(),"RECREATE");
 
   // for check
   TH1* hidtl1 = new TH2D("hidtl1",Form("BDC%i ID Tleading",fBDCid),128,0.5,128.5, 100,0,30000);

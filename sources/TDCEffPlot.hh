@@ -34,6 +34,9 @@ public:
   void SetROOTfileDir(const char* dir){fROOTfileDir = dir;}
   void SetROOTfileName(const char* fname){fROOTfileName = fname;}
   void SetHistName(const char* hname){fHistName = hname;}
+
+  void SetROOTfileOverwrite(bool tf){fROOTfileOverwrite = tf;}
+  bool ROOTfileOverwrite(){return fROOTfileOverwrite;}
   
 protected:
   TString fRIDFfileDir;
@@ -44,10 +47,12 @@ protected:
   TList* fFilenameList;
   TFile *fOutFile;
   TString fHistName;
+  Bool_t fROOTfileOverwrite;
 
   TString fMapFilename;
   TString fRunListFilename;
 
+  
   // run list
   std::vector<int> fVRunNum;
   std::vector<double> fVhv;
