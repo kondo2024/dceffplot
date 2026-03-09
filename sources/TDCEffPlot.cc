@@ -18,21 +18,20 @@ TDCEffPlot::TDCEffPlot()
     fROOTfileOverwrite(true)
 {
   // set Color palette
-  fPalette[0] = 2;
-  fPalette[1] = 1;
-  fPalette[2] = 3;
-  fPalette[3] = 4;
-  fPalette[4] = 6;
-  fPalette[5] = 7;
-  fPalette[6] = 8;
-  fPalette[7] = 9;
-  fPalette[8] = 45;
-  fPalette[9] = 30;
-  fPalette[10] = 38;
-  fPalette[11] = 42;
-  fPalette[12] = 49;
-  fPalette[13] = 40;
-
+  fPalette.push_back(2);
+  fPalette.push_back(1);
+  fPalette.push_back(3);
+  fPalette.push_back(4);
+  fPalette.push_back(6);
+  fPalette.push_back(7);
+  fPalette.push_back(8);
+  fPalette.push_back(9);
+  fPalette.push_back(45);
+  fPalette.push_back(30);
+  fPalette.push_back(38);
+  fPalette.push_back(42);
+  fPalette.push_back(49);
+  fPalette.push_back(40);
   
 }
 //_________________________________________________
