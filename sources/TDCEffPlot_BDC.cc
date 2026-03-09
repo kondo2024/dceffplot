@@ -282,12 +282,16 @@ void TDCEffPlot_BDC::PlotSummary(TString dir)
   fOutFile->cd();
 
   // efficiency curve summary
-  //TCanvas *c1 = new TCanvas();
-  TPad *c1 = new TPad();
+  TCanvas *c0 = new TCanvas();
   TString str_temp = Form("c%s",dir.Data());
   str_temp.ToLower();
-  c1->SetName(str_temp.Data());
-  c1->SetTitle(Form("BDC%i %s",fBDCid,dir.Data()));
+  c0->SetName(str_temp.Data());
+  c0->SetTitle(Form("BDC%i %s",fBDCid,dir.Data()));
+
+  TPad *c1 = new TPad(Form("pad%s",dir.Data()),Form("pad%s",dir.Data()),0,0,1,1);
+  c1->Draw();
+  c1->cd();
+
   TList *tlist = new TList();
   tlist->SetName(Form("bdc%i%s",fBDCid,dir.Data()));
 
