@@ -6,10 +6,10 @@ analyze run and make plot of efficiency curve of a drift chamber.
 - ROOT v6
 - ANAROOT
 
-## how to install
+## How to install
 <code>$ cd dceffplot</code>
 
-in case TARTSYS is not defined, modify setup.sh and run it.(<code>$ source setup.sh</code>)
+If TARTSYS is not defined, run setup.sh of ANAROOT
 
 <code>$ mkdir build
 $ mkdir install
@@ -17,7 +17,7 @@ $ cd build
 $ cmake -DCMAKE_INSTALL_PREFIX=../install ../sources
 $ make install</code>
 
-## how to use
+## How to use
 1. modify runlist.txt
 1. modify run_xxx.cc for your directories
 1. $ root[] .L dceffplot/install/lib/dceffplot.so
