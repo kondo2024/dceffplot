@@ -115,7 +115,11 @@ Double_t TDCEffPlot::GetEffMulti(Int_t layer, Int_t multi)
 {
 //  TH1* h = (TH1*)gDirectory->Get(Form("hmulti%i",layer));
   TH1* h = (TH1*)gDirectory->Get(Form("%s%i",fHistName.Data(),layer));
-
+  if (!h){
+    cout<<"histogram not found, skip: "<<fHistName.Data()<<layer<<endl;
+    return 0;
+  }
+  
   Int_t Ntrig = h->GetEntries();
   Int_t ix = h->FindBin((double)multi);
   Int_t counts = h->GetBinContent(ix);
