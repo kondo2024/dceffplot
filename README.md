@@ -30,4 +30,5 @@ $ make install</code>
 Then, efficiency plots will be created.
 
 example:
+
 ![plot_example](plot_example.png)
