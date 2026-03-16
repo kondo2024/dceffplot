@@ -36,7 +36,7 @@ $ make install</code>
 </code>
 
 ### example of run_xxx.cc
-<code>
+``` c++
 /* usage
    root[] .L dceffplot/install/lib/dceffplot.so
    root[] .x macros/dceffplot/run_bdc1.cc
@@ -67,7 +67,7 @@ void run_bdc1(){
 //  for (int i=0;i<8;++i) dcplot.Plot(i);
 
 }
-</code>
+```
 
 
 Then, efficiency plots will be created.
