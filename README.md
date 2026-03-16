@@ -26,8 +26,10 @@ $ make install
 1. $ root[] .L dceffplot/install/lib/dceffplot.so
 1. $ root[] run_xxx.cc
 
+Then, efficiency plots will be created.
+
 (in case of NEOLITH)
-- modify map.txt
+- also modify map.txt
 
 ### example of runlist.txt
 ```
@@ -73,8 +75,6 @@ void run_bdc1(){
 ```
 
 
-Then, efficiency plots will be created.
-
-example:
+### example of plot
 
 ![plot_example](plot_example.png)
