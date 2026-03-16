@@ -11,11 +11,13 @@ analyze run and make plot of efficiency curve of a drift chamber.
 
 If TARTSYS is not defined, run setup.sh of ANAROOT
 
-<code>$ mkdir build
+```
+$ mkdir build
 $ mkdir install
 $ cd build
 $ cmake -DCMAKE_INSTALL_PREFIX=../install ../sources
-$ make install</code>
+$ make install
+```
 
 ## How to use
 1. modify runlist.txt
@@ -27,13 +29,13 @@ $ make install</code>
 - modify map.txt
 
 ### example of runlist.txt
-<code>
+```
 #Run HV
 137 600
 138 625
 139 650
 140 675
-</code>
+```
 
 ### example of run_xxx.cc
 ``` c++
