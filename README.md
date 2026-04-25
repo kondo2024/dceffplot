@@ -16,7 +16,7 @@ If TARTSYS is not defined, run setup.sh of ANAROOT
 $ mkdir build
 $ mkdir install
 $ cd build
-$ cmake -DCMAKE_INSTALL_PREFIX=../install ../sources
+$ cmake -DCMAKE_INSTALL_PREFIX=../install ../
 $ make install
 ```
 
