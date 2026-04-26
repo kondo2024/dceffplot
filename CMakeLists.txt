@@ -23,3 +23,4 @@ add_subdirectory(sources)
 
 install(DIRECTORY example/ 
         DESTINATION macros/dceffplot)
+#install(FILES ${INC_FILES} DESTINATION include/dceffplot)
