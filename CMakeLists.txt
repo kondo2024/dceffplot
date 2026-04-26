@@ -20,3 +20,6 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 add_subdirectory(sources)
+
+install(DIRECTORY example/ 
+        DESTINATION macros/dceffplot)
