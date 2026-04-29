@@ -23,8 +23,8 @@ $ make install
 ## How to use
 1. modify runlist.txt
 1. modify run_xxx.cc for your directories
-1. $ root[] .L dceffplot/install/lib/dceffplot.so
-1. $ root[] run_xxx.cc
+1. root[] .L dceffplot/install/lib/dceffplot.so
+1. root[] run_xxx.cc
 
 Then, efficiency plots will be created.
 
